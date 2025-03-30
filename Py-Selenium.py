@@ -22,7 +22,6 @@ import csv
 import re
 from datetime import datetime, timedelta
 
-
 try:
     today = datetime.now().date()
     yesterday = today - timedelta(days = 1)
@@ -30,6 +29,7 @@ try:
     thisnow = today.strftime("%Y-%m-%d")
     yesterday = yesterday.strftime("%Y-%m-%d")
     beforeyesterday = beforeyesterday.strftime("%Y-%m-%d")
+
     def clear_string(workstring):
         clear1 = re.compile('<.*?>') #find html-tags
         clear2 = re.compile(r'^\s+') #find spaces bevor 1st word
@@ -40,6 +40,7 @@ try:
         stringclear = re.sub(clear3, '', stringclear)
         stringclear = re.sub(clear4, ' ', stringclear) #replace by one space
         return stringclear
+
     def extract_date(rawstamp):
         clearbefore = re.compile(r'^.*?"')
         clearafter = re.compile(r'T.*')
@@ -94,7 +95,7 @@ try:
             break
         iz += 1
 
-    time.sleep(2)
+    time.sleep(1)
     driver.close()
     driver.quit()
 
@@ -104,8 +105,7 @@ try:
     print("yesterday: " + str(yesterday))
     print("beforeyesterday: " + str(beforeyesterday))
     print("iz: " + str(iz))
-    print("abbruch: " + str(abbruch))
-
+    print("")
     #--------------- write file ---------------#
     def fill_file(file_name):
         with open(file_name, 'a', newline='') as file:
@@ -123,12 +123,12 @@ try:
     else:
         fill_file(file_name)
 except:
-    print("an error occurred")
-finally:
-    print(dir())
+    print("some error occurred")
 
 
+print(dir())
+print("")
 #print("nArticles: " + str(nArticles))
 #print("iz = " + str(iz))
-print(globals())
+#print(globals())
 
