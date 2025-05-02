@@ -1,3 +1,5 @@
 # Py-Selenium
-under construction
-trying to get news headlines without api using selenium
+
+getting news headlines without api using selenium
+
+under construction: sentiment analysis of headlines
