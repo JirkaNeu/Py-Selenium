@@ -26,7 +26,7 @@ try:
     today = datetime.now().date()
     yesterday = today - timedelta(days = 1)
     beforeyesterday = today - timedelta(days = 2)
-    thisnow = today.strftime("%Y-%m-%d")
+    today = today.strftime("%Y-%m-%d")
     yesterday = yesterday.strftime("%Y-%m-%d")
     beforeyesterday = beforeyesterday.strftime("%Y-%m-%d")
 
@@ -76,13 +76,10 @@ try:
         SZeile13 = Page_Result13.get_attribute('innerHTML')# Quelle/Ort
         SZeile14 = Page_Result14.get_attribute('href')# Hyperlink
         #
-        #print(DateExtract)
         global abbruch
-        if DateExtract == today or DateExtract == yesterday:
-        #if DateExtract == today:
+        if DateExtract == today or DateExtract == yesterday or DateExtract == beforeyesterday:
             result_list.append([ArtNr, SZeile101, DateExtract, SZeile102, SZeile11, SZeile12, SZeile13, SZeile14])
-        if DateExtract == beforeyesterday:
-            print(ArtNr)
+        else:
             abbruch = True
 
     abbruch = False
@@ -102,14 +99,14 @@ try:
 
     print("nArticles: " + str(nArticles))
     print("today: " + str(today))
-    print("thisnow: " + str(thisnow))
+    #print("thisnow: " + str(thisnow))
     print("yesterday: " + str(yesterday))
     print("beforeyesterday: " + str(beforeyesterday))
     print("iz: " + str(iz))
     print("")
     #--------------- write file ---------------#
     def fill_file(file_name):
-        with open(file_name, 'w', newline='') as file:
+        with open(file_name, 'a', newline='') as file:
             fill_file = csv.writer(file)
             fill_file.writerows(result_list)
 
