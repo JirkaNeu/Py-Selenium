@@ -55,8 +55,8 @@ try:
 
     Page_Result_t = driver.title
 
-    nArticles = driver.find_elements(By.XPATH, "/html/body/div[4]/div/main/div/div[2]/article")
-    nArticles = len(nArticles)
+    nArticles = len(driver.find_elements(By.XPATH, "/html/body/div[4]/div/main/div/div[2]/article"))
+    #nArticles = len(nArticles)
     result_list = []
 
     def get_Schlagzeile(ArtNr):
@@ -78,7 +78,8 @@ try:
         #
         #print(DateExtract)
         global abbruch
-        if DateExtract == yesterday:
+        if DateExtract == today or DateExtract == yesterday:
+        #if DateExtract == today:
             result_list.append([ArtNr, SZeile101, DateExtract, SZeile102, SZeile11, SZeile12, SZeile13, SZeile14])
         if DateExtract == beforeyesterday:
             print(ArtNr)
@@ -89,7 +90,7 @@ try:
     while iz <= nArticles:
         get_Schlagzeile(iz)
         #print(iz)
-        if iz == 700:
+        if iz == 850:
             break
         if abbruch == True:
             break
@@ -108,7 +109,7 @@ try:
     print("")
     #--------------- write file ---------------#
     def fill_file(file_name):
-        with open(file_name, 'a', newline='') as file:
+        with open(file_name, 'w', newline='') as file:
             fill_file = csv.writer(file)
             fill_file.writerows(result_list)
 
