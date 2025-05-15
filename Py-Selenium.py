@@ -130,3 +130,6 @@ print("")
 #print("iz = " + str(iz))
 #print(globals())
 
+#prepare for sentiment analysis
+
+print(result_list[3][5])
