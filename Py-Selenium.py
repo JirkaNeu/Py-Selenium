@@ -22,6 +22,30 @@ import csv
 import re
 from datetime import datetime, timedelta
 
+
+def results_to_file():
+    #--------------- write file ---------------#
+    def fill_file(file_name):
+        with open(file_name, 'a', newline='') as file:
+            fill_file = csv.writer(file)
+            fill_file.writerows(result_list)
+
+    file_name = "Page_Results.csv"
+
+    if not os.path.exists(file_name):
+        head_row = [['Nr.', 'Timestamp', 'Datum', 'Zeitangabe', 'Kategorie', 'Schlagzeile', 'Quelle/Ort', 'Link']]
+        with open(file_name, 'w', newline='') as file:
+            preparefile = csv.writer(file)
+            preparefile.writerows(head_row)
+        fill_file(file_name)
+    else:
+        fill_file(file_name)
+
+    return None
+
+
+
+
 try:
     today = datetime.now().date()
     yesterday = today - timedelta(days = 1)
@@ -104,22 +128,13 @@ try:
     print("beforeyesterday: " + str(beforeyesterday))
     print("iz: " + str(iz))
     print("")
-    #--------------- write file ---------------#
-    def fill_file(file_name):
-        with open(file_name, 'a', newline='') as file:
-            fill_file = csv.writer(file)
-            fill_file.writerows(result_list)
 
-    file_name = "Page_Results.csv"
+    # prepare for sentiment analysis
+    print(len(result_list))
+    print(result_list[3][5])
 
-    if not os.path.exists(file_name):
-        head_row = [['Nr.', 'Timestamp', 'Datum', 'Zeitangabe', 'Kategorie', 'Schlagzeile', 'Quelle/Ort', 'Link']]
-        with open(file_name, 'w', newline='') as file:
-            preparefile = csv.writer(file)
-            preparefile.writerows(head_row)
-        fill_file(file_name)
-    else:
-        fill_file(file_name)
+
+
 except:
     print("some error occurred")
 
@@ -130,6 +145,3 @@ print("")
 #print("iz = " + str(iz))
 #print(globals())
 
-#prepare for sentiment analysis
-
-print(result_list[3][5])
