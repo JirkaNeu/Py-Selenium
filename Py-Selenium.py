@@ -28,7 +28,6 @@ from transformers import pipeline
 model = pipeline("text-classification", model="tabularisai/multilingual-sentiment-analysis")
 
 def get_sentiment(this_input):
-    #model = pipeline("text-classification", model="tabularisai/multilingual-sentiment-analysis")
     headline_senti = model(this_input)
     senti_score = headline_senti[0]['score']
     headline_senti = headline_senti[0]['label']
