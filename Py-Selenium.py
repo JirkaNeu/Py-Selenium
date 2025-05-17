@@ -117,8 +117,6 @@ try:
 except:
     print("some error occurred")
 
-
-
 # --------------- write file ---------------#
 def fill_file(file_name):
     with open(file_name, 'a', newline='') as file:
@@ -137,10 +135,37 @@ def results_to_file():
     else:
         fill_file(file_name)
     return None
-
 results_to_file()
 
-#print(dir())
-#print("")
-#print(globals())
+
+# --------------- simple bar chart ---------------#
+import pandas as pd
+
+plot_values = []
+for i in range(len(result_list)):
+    plot_values.append(result_list[i][8])
+
+jne_results = pd.DataFrame()
+jne_results = jne_results.assign(Sentiments = plot_values)
+count_values = jne_results['Sentiments'].value_counts()
+jne_output = pd.DataFrame({'Sentiments': count_values.index, 'counts': count_values.values})
+
+#https://pythonspot.com/matplotlib-bar-chart/
+import matplotlib.pyplot as plt
+fig, ax = plt.subplots()
+
+plot_results = jne_output
+
+cats = plot_results["Sentiments"].apply(lambda x: str(x)[:10])
+vals = plot_results["counts"]
+
+ax.bar(cats, vals)
+ax.set_title('Sentiments of headlines')
+ax.set_xlabel('Sentiments')
+ax.set_ylabel('Frequency')
+#plt.xticks(rotation=45, ha='right')
+plt.xticks(rotation=35, ha='right')
+
+plt.show()
+
 
