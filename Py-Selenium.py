@@ -23,28 +23,14 @@ import re
 from datetime import datetime, timedelta
 
 
-def results_to_file():
-    #--------------- write file ---------------#
-    def fill_file(file_name):
-        with open(file_name, 'a', newline='') as file:
-            fill_file = csv.writer(file)
-            fill_file.writerows(result_list)
+import torch
+from transformers import pipeline
+model = pipeline("text-classification", model="tabularisai/multilingual-sentiment-analysis")
 
-    file_name = "Page_Results.csv"
-
-    if not os.path.exists(file_name):
-        head_row = [['Nr.', 'Timestamp', 'Datum', 'Zeitangabe', 'Kategorie', 'Schlagzeile', 'Quelle/Ort', 'Link']]
-        with open(file_name, 'w', newline='') as file:
-            preparefile = csv.writer(file)
-            preparefile.writerows(head_row)
-        fill_file(file_name)
-    else:
-        fill_file(file_name)
-
-    return None
-
-
-
+def get_sentiment(this_input):
+    #model = pipeline("text-classification", model="tabularisai/multilingual-sentiment-analysis")
+    headline_senti = model(this_input)
+    return headline_senti
 
 try:
     today = datetime.now().date()
@@ -99,10 +85,11 @@ try:
         SZeile12 = Page_Result12.get_attribute('innerHTML')# Schlagzeile
         SZeile13 = Page_Result13.get_attribute('innerHTML')# Quelle/Ort
         SZeile14 = Page_Result14.get_attribute('href')# Hyperlink
+        SZ_senti = get_sentiment(SZeile12)# get sentiment of headline
         #
         global abbruch
         if DateExtract == today or DateExtract == yesterday or DateExtract == beforeyesterday:
-            result_list.append([ArtNr, SZeile101, DateExtract, SZeile102, SZeile11, SZeile12, SZeile13, SZeile14])
+            result_list.append([ArtNr, SZeile101, DateExtract, SZeile102, SZeile11, SZeile12, SZeile13, SZeile14, SZ_senti])
         else:
             abbruch = True
 
@@ -131,12 +118,36 @@ try:
 
     # prepare for sentiment analysis
     print(len(result_list))
-    print(result_list[3][5])
-
-
+    for i in range(5):
+        print(result_list[i][8])
 
 except:
     print("some error occurred")
+
+
+
+
+# --------------- write file ---------------#
+def fill_file(file_name):
+    with open(file_name, 'a', newline='') as file:
+        fill_file = csv.writer(file)
+        fill_file.writerows(result_list)
+
+    return None
+
+def results_to_file():
+    file_name = "Page_Results.csv"
+
+    if not os.path.exists(file_name):
+        head_row = [['Nr.', 'Timestamp', 'Datum', 'Zeitangabe', 'Kategorie', 'Schlagzeile', 'Quelle/Ort', 'Link']]
+        with open(file_name, 'w', newline='') as file:
+            preparefile = csv.writer(file)
+            preparefile.writerows(head_row)
+        fill_file(file_name)
+    else:
+        fill_file(file_name)
+
+    return None
 
 
 print(dir())
