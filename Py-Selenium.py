@@ -30,6 +30,8 @@ model = pipeline("text-classification", model="tabularisai/multilingual-sentimen
 def get_sentiment(this_input):
     #model = pipeline("text-classification", model="tabularisai/multilingual-sentiment-analysis")
     headline_senti = model(this_input)
+    senti_score = headline_senti[0]['score']
+    headline_senti = headline_senti[0]['label']
     return headline_senti
 
 try:
@@ -110,20 +112,10 @@ try:
 
     print("nArticles: " + str(nArticles))
     print("today: " + str(today))
-    #print("thisnow: " + str(thisnow))
     print("yesterday: " + str(yesterday))
     print("beforeyesterday: " + str(beforeyesterday))
-    print("iz: " + str(iz))
-    print("")
-
-    # prepare for sentiment analysis
-    print(len(result_list))
-    for i in range(5):
-        print(result_list[i][8])
-
 except:
     print("some error occurred")
-
 
 
 
@@ -132,27 +124,23 @@ def fill_file(file_name):
     with open(file_name, 'a', newline='') as file:
         fill_file = csv.writer(file)
         fill_file.writerows(result_list)
-
     return None
 
 def results_to_file():
     file_name = "Page_Results.csv"
-
     if not os.path.exists(file_name):
-        head_row = [['Nr.', 'Timestamp', 'Datum', 'Zeitangabe', 'Kategorie', 'Schlagzeile', 'Quelle/Ort', 'Link']]
+        head_row = [['Nr.', 'Timestamp', 'Datum', 'Zeitangabe', 'Kategorie', 'Schlagzeile', 'Quelle/Ort', 'Link', 'Sentiment']]
         with open(file_name, 'w', newline='') as file:
             preparefile = csv.writer(file)
             preparefile.writerows(head_row)
         fill_file(file_name)
     else:
         fill_file(file_name)
-
     return None
 
+results_to_file()
 
-print(dir())
-print("")
-#print("nArticles: " + str(nArticles))
-#print("iz = " + str(iz))
+#print(dir())
+#print("")
 #print(globals())
 
